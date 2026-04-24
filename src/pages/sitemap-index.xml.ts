@@ -9,6 +9,16 @@ export async function GET() {
     '/herramientas/generador-cotizacion',
     '/blog',
     '/privacidad',
+    '/blog/comisiones-paypal-latam-2026',
+    '/blog/wise-vs-paypal-freelance',
+    '/blog/cuanto-cobrar-freelance-exterior',
+    '/blog/como-hacer-invoice-freelance',
+    '/blog/mejores-plataformas-cobro-latam',
+    '/blog/comisiones-payoneer-guia-completa',
+    '/blog/comisiones-stripe-latam-mexico',
+    '/blog/errores-comunes-cobrar-exterior',
+    '/blog/recibir-pagos-exterior-colombia',
+    '/blog/retirar-dinero-wise-argentina',
   ];
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>

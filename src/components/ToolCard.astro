@@ -1,0 +1,8 @@
+---
+const { title, description, href, icon = 'UT' } = Astro.props;
+---
+<a href={href} class="group block rounded-lg border border-zinc-800 bg-zinc-900 p-5 transition hover:border-emerald-500 hover:bg-zinc-900/80">
+  <div class="mb-4 flex h-10 w-10 items-center justify-center rounded-md bg-emerald-500/10 text-sm font-bold text-emerald-300">{icon}</div>
+  <h2 class="font-semibold text-white transition group-hover:text-emerald-300">{title}</h2>
+  <p class="mt-2 text-sm leading-6 text-zinc-400">{description}</p>
+</a>
