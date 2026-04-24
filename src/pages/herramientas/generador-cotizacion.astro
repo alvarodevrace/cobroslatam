@@ -1,0 +1,84 @@
+---
+import Layout from '../../components/Layout.astro';
+
+const title = 'Generador Cotizacion 2026 | CobrosLatAm';
+const description = 'Generador de cotizacion freelance para crear propuesta de precio clara, copiable y lista para enviar a clientes internacionales.';
+---
+<Layout {title} {description}>
+  <section class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_380px]">
+    <div>
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wide text-emerald-300">Texto listo para enviar</p>
+      <h1 class="mb-4 text-4xl font-bold text-white">Generador de cotizacion</h1>
+      <p class="mb-8 max-w-2xl text-zinc-400">Genera una propuesta breve con alcance, precio, metodo de pago y tiempos para copiar y enviar por email o chat.</p>
+      <div class="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
+        <div class="grid gap-4 sm:grid-cols-2">
+          <label class="block text-sm text-zinc-300">
+            Cliente
+            <input id="clientName" type="text" value="Cliente" class="mt-2 w-full rounded-md border border-zinc-700 bg-zinc-950 px-3 py-3 text-white" />
+          </label>
+          <label class="block text-sm text-zinc-300">
+            Servicio
+            <input id="serviceName" type="text" value="Implementacion web" class="mt-2 w-full rounded-md border border-zinc-700 bg-zinc-950 px-3 py-3 text-white" />
+          </label>
+          <label class="block text-sm text-zinc-300">
+            Precio
+            <input id="price" type="number" min="0" step="0.01" value="1200" class="mt-2 w-full rounded-md border border-zinc-700 bg-zinc-950 px-3 py-3 text-white" />
+          </label>
+          <label class="block text-sm text-zinc-300">
+            Moneda
+            <input id="currency" type="text" value="USD" class="mt-2 w-full rounded-md border border-zinc-700 bg-zinc-950 px-3 py-3 text-white" />
+          </label>
+          <label class="block text-sm text-zinc-300">
+            Entrega
+            <input id="deliveryTime" type="text" value="7 dias habiles" class="mt-2 w-full rounded-md border border-zinc-700 bg-zinc-950 px-3 py-3 text-white" />
+          </label>
+          <label class="block text-sm text-zinc-300">
+            Pago
+            <input id="paymentMethod" type="text" value="Wise o PayPal" class="mt-2 w-full rounded-md border border-zinc-700 bg-zinc-950 px-3 py-3 text-white" />
+          </label>
+          <label class="block text-sm text-zinc-300 sm:col-span-2">
+            Alcance
+            <textarea id="scope" rows="5" class="mt-2 w-full rounded-md border border-zinc-700 bg-zinc-950 px-3 py-3 text-white">Incluye discovery, ejecucion principal, una ronda de ajustes y entrega final.</textarea>
+          </label>
+        </div>
+      </div>
+    </div>
+    <aside class="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
+      <div class="mb-4 flex items-center justify-between gap-4">
+        <h2 class="text-lg font-semibold text-white">Texto generado</h2>
+        <button id="copyQuote" type="button" class="rounded-md bg-emerald-500 px-4 py-2 text-sm font-semibold text-zinc-950 transition hover:bg-emerald-400">Copiar</button>
+      </div>
+      <pre id="quoteOutput" class="whitespace-pre-wrap rounded-xl border border-zinc-800 bg-zinc-950 p-4 text-sm leading-7 text-zinc-300"></pre>
+      <p id="copyStatus" class="mt-4 text-sm text-zinc-400">Listo para copiar.</p>
+    </aside>
+  </section>
+  <script>
+    const clientName = document.querySelector('#clientName');
+    const serviceName = document.querySelector('#serviceName');
+    const price = document.querySelector('#price');
+    const currency = document.querySelector('#currency');
+    const deliveryTime = document.querySelector('#deliveryTime');
+    const paymentMethod = document.querySelector('#paymentMethod');
+    const scope = document.querySelector('#scope');
+    const quoteOutput = document.querySelector('#quoteOutput');
+    const copyQuote = document.querySelector('#copyQuote');
+    const copyStatus = document.querySelector('#copyStatus');
+
+    function generate() {
+      quoteOutput.textContent = `Hola ${clientName.value || 'Cliente'},\n\nComparto propuesta para ${serviceName.value || 'servicio solicitado'}.\n\nAlcance:\n${scope.value || '-'}\n\nPrecio total: ${currency.value || 'USD'} ${Number(price.value || 0).toFixed(2)}\nEntrega estimada: ${deliveryTime.value || 'por definir'}\nMetodo de pago sugerido: ${paymentMethod.value || 'por definir'}\n\nLa propuesta incluye una ronda de ajustes menores y arranca una vez confirmado el pago inicial.\n\nSi te parece bien, te envio invoice o detalle final para avanzar.`;
+      copyStatus.textContent = 'Listo para copiar.';
+    }
+
+    [clientName, serviceName, price, currency, deliveryTime, paymentMethod, scope].forEach((element) => element.addEventListener('input', generate));
+    copyQuote.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(quoteOutput.textContent || '');
+        copyStatus.textContent = 'Texto copiado.';
+      } catch {
+        copyStatus.textContent = 'No se pudo copiar. Hazlo manual.';
+      }
+    });
+
+    generate();
+  </script>
+</Layout>

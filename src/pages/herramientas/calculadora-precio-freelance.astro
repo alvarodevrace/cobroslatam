@@ -1,0 +1,99 @@
+---
+import Layout from '../../components/Layout.astro';
+
+const title = 'Precio Freelance 2026 | CobrosLatAm';
+const description = 'Calculadora precio freelance para definir tarifa hora o mensual con gastos, impuestos, fees y margen en clientes del exterior.';
+---
+<Layout {title} {description}>
+  <section class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_340px]">
+    <div>
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wide text-emerald-300">Pricing internacional</p>
+      <h1 class="mb-4 text-4xl font-bold text-white">Calculadora de precio freelance</h1>
+      <p class="mb-8 max-w-2xl text-zinc-400">Convierte tus gastos y meta neta en una tarifa por hora o mensual sostenible para clientes del exterior.</p>
+      <div class="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
+        <div class="grid gap-4 sm:grid-cols-2">
+          <label class="block text-sm text-zinc-300">
+            Meta neta mensual
+            <input id="netGoal" type="number" min="0" step="0.01" value="3000" class="mt-2 w-full rounded-md border border-zinc-700 bg-zinc-950 px-3 py-3 text-white" />
+          </label>
+          <label class="block text-sm text-zinc-300">
+            Gastos operativos
+            <input id="expenses" type="number" min="0" step="0.01" value="600" class="mt-2 w-full rounded-md border border-zinc-700 bg-zinc-950 px-3 py-3 text-white" />
+          </label>
+          <label class="block text-sm text-zinc-300">
+            Impuestos %
+            <input id="taxRate" type="number" min="0" step="0.01" value="12" class="mt-2 w-full rounded-md border border-zinc-700 bg-zinc-950 px-3 py-3 text-white" />
+          </label>
+          <label class="block text-sm text-zinc-300">
+            Fees cobro %
+            <input id="feeRate" type="number" min="0" step="0.01" value="6" class="mt-2 w-full rounded-md border border-zinc-700 bg-zinc-950 px-3 py-3 text-white" />
+          </label>
+          <label class="block text-sm text-zinc-300">
+            Horas facturables al mes
+            <input id="hours" type="number" min="1" step="1" value="96" class="mt-2 w-full rounded-md border border-zinc-700 bg-zinc-950 px-3 py-3 text-white" />
+          </label>
+          <label class="block text-sm text-zinc-300">
+            Margen %
+            <input id="marginRate" type="number" min="0" step="0.01" value="20" class="mt-2 w-full rounded-md border border-zinc-700 bg-zinc-950 px-3 py-3 text-white" />
+          </label>
+        </div>
+      </div>
+    </div>
+    <aside class="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
+      <h2 class="mb-4 text-lg font-semibold text-white">Precio sugerido</h2>
+      <dl class="space-y-4">
+        <div class="flex justify-between gap-4 border-b border-zinc-800 pb-3">
+          <dt class="text-zinc-400">Ingreso bruto meta</dt>
+          <dd id="grossGoal" class="font-semibold text-white">$0.00</dd>
+        </div>
+        <div class="flex justify-between gap-4 border-b border-zinc-800 pb-3">
+          <dt class="text-zinc-400">Tarifa por hora</dt>
+          <dd id="hourlyRate" class="font-semibold text-emerald-300">$0.00</dd>
+        </div>
+        <div class="flex justify-between gap-4 border-b border-zinc-800 pb-3">
+          <dt class="text-zinc-400">Retainer mensual</dt>
+          <dd id="monthlyRate" class="font-semibold text-white">$0.00</dd>
+        </div>
+        <div class="flex justify-between gap-4">
+          <dt class="text-zinc-400">Costo base por hora</dt>
+          <dd id="baseRate" class="text-xl font-bold text-white">$0.00</dd>
+        </div>
+      </dl>
+    </aside>
+  </section>
+  <script>
+    const netGoal = document.querySelector('#netGoal');
+    const expenses = document.querySelector('#expenses');
+    const taxRate = document.querySelector('#taxRate');
+    const feeRate = document.querySelector('#feeRate');
+    const hours = document.querySelector('#hours');
+    const marginRate = document.querySelector('#marginRate');
+    const grossGoal = document.querySelector('#grossGoal');
+    const hourlyRate = document.querySelector('#hourlyRate');
+    const monthlyRate = document.querySelector('#monthlyRate');
+    const baseRate = document.querySelector('#baseRate');
+    const money = new Intl.NumberFormat('es-EC', { style: 'currency', currency: 'USD' });
+
+    function calculate() {
+      const goal = Number(netGoal.value) || 0;
+      const ops = Number(expenses.value) || 0;
+      const taxes = (Number(taxRate.value) || 0) / 100;
+      const fees = (Number(feeRate.value) || 0) / 100;
+      const billableHours = Math.max(1, Number(hours.value) || 1);
+      const margin = (Number(marginRate.value) || 0) / 100;
+      const denominator = 1 - taxes - fees;
+      const gross = denominator <= 0 ? 0 : (goal + ops) / denominator;
+      const base = gross / billableHours;
+      const hourly = base * (1 + margin);
+      const monthly = hourly * billableHours;
+
+      grossGoal.textContent = money.format(gross);
+      hourlyRate.textContent = money.format(hourly);
+      monthlyRate.textContent = money.format(monthly);
+      baseRate.textContent = money.format(base);
+    }
+
+    [netGoal, expenses, taxRate, feeRate, hours, marginRate].forEach((element) => element.addEventListener('input', calculate));
+    calculate();
+  </script>
+</Layout>

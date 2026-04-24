@@ -1,0 +1,60 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../components/Layout.astro';
+
+const title = 'Blog CobrosLatAm 2026 | CobrosLatAm';
+const description = 'Guias practicas para freelancers de LatAm sobre comisiones, precios, invoices y plataformas de cobro.';
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+const featuredSlugs = [
+  'comisiones-paypal-latam-2026',
+  'wise-vs-paypal-freelance',
+  'cuanto-cobrar-freelance-exterior',
+  'como-hacer-invoice-freelance',
+  'mejores-plataformas-cobro-latam',
+];
+const featuredPosts = posts.filter((post) => featuredSlugs.includes(post.slug));
+const otherPosts = posts.filter((post) => !featuredSlugs.includes(post.slug));
+---
+<Layout {title} {description}>
+  <section class="mb-10 max-w-3xl">
+    <p class="mb-3 text-sm font-semibold uppercase tracking-wide text-emerald-300">Blog CobrosLatAm</p>
+    <h1 class="mb-4 text-4xl font-bold text-white">Guias para cobrar mejor desde LatAm</h1>
+    <p class="text-lg leading-8 text-zinc-400">Articulos practicos sobre comisiones, plataformas, invoices, retiro de dinero y estructura de precios para trabajo freelance internacional.</p>
+  </section>
+
+  <section class="mb-10 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-6">
+    <div class="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <p class="text-sm font-semibold uppercase tracking-wide text-emerald-300">Batch nuevo</p>
+        <h2 class="text-2xl font-bold text-white">Guias destacadas para cobros freelance</h2>
+      </div>
+      <p class="text-sm text-zinc-400">Cinco posts conectados con herramientas core del sitio.</p>
+    </div>
+    <div class="grid gap-4 lg:grid-cols-5">
+      {featuredPosts.map((post) => (
+        <article class="rounded-lg border border-zinc-800 bg-zinc-950/70 p-4">
+          <p class="mb-2 text-xs text-zinc-500">{post.data.pubDate.toLocaleDateString('es-EC')}</p>
+          <h3 class="text-base font-semibold leading-6 text-white">
+            <a href={`/blog/${post.slug}`} class="hover:text-emerald-300">{post.data.title}</a>
+          </h3>
+          <a href={`/blog/${post.slug}`} class="mt-3 inline-block text-sm font-semibold text-emerald-300 hover:text-emerald-200">Leer guia</a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="grid gap-4 md:grid-cols-2">
+    {otherPosts.map((post) => (
+      <article class="rounded-lg border border-zinc-800 bg-zinc-900 p-5">
+        <p class="mb-3 text-xs text-zinc-500">{post.data.pubDate.toLocaleDateString('es-EC')}</p>
+        <h2 class="text-xl font-semibold text-white">
+          <a href={`/blog/${post.slug}`} class="hover:text-emerald-300">{post.data.title}</a>
+        </h2>
+        <p class="mt-3 text-sm leading-6 text-zinc-400">{post.data.description}</p>
+        <a href={`/blog/${post.slug}`} class="mt-4 inline-block text-sm font-semibold text-emerald-300 hover:text-emerald-200">Leer guia</a>
+      </article>
+    ))}
+  </section>
+</Layout>

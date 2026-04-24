@@ -1,0 +1,70 @@
+---
+import Layout from '../../components/Layout.astro';
+
+const title = 'Comparador Plataformas 2026 | CobrosLatAm';
+const description = 'Comparador de plataformas de cobro para freelancers: fees, cambio, retiros y uso ideal de PayPal, Wise, Stripe y Payoneer.';
+---
+<Layout {title} {description}>
+  <section>
+    <p class="mb-3 text-sm font-semibold uppercase tracking-wide text-emerald-300">Decision de cobro</p>
+    <h1 class="mb-4 text-4xl font-bold text-white">Comparador de plataformas</h1>
+    <p class="mb-8 max-w-3xl text-zinc-400">Compara plataformas segun fee, calidad de tipo de cambio, retiro local y caso de uso. Ajusta el monto y mira cual te deja mas neto.</p>
+  </section>
+  <section class="grid gap-8 lg:grid-cols-[320px_minmax(0,1fr)]">
+    <aside class="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
+      <label class="block text-sm text-zinc-300">
+        Monto de referencia
+        <input id="referenceAmount" type="number" min="0" step="0.01" value="1000" class="mt-2 w-full rounded-md border border-zinc-700 bg-zinc-950 px-3 py-3 text-white" />
+      </label>
+      <p class="mt-5 text-sm text-zinc-400">Los porcentajes son orientativos para comparar escenarios, no para reemplazar tarifas oficiales del proveedor.</p>
+    </aside>
+    <div class="overflow-x-auto rounded-2xl border border-zinc-800 bg-zinc-900 p-4">
+      <table class="min-w-full text-left text-sm">
+        <thead class="text-zinc-500">
+          <tr>
+            <th class="pb-3 pr-4 font-medium">Plataforma</th>
+            <th class="pb-3 pr-4 font-medium">Fee estimado</th>
+            <th class="pb-3 pr-4 font-medium">Neto aprox</th>
+            <th class="pb-3 pr-4 font-medium">Cambio</th>
+            <th class="pb-3 pr-4 font-medium">Retiro</th>
+            <th class="pb-3 font-medium">Uso ideal</th>
+          </tr>
+        </thead>
+        <tbody id="platformRows" class="divide-y divide-zinc-800 text-zinc-300"></tbody>
+      </table>
+    </div>
+  </section>
+  <script>
+    const data = [
+      { name: 'Wise', percent: 1.1, fixed: 0.5, fx: 'Mercado medio', withdraw: 'Bueno', use: 'Clientes con transferencias ACH/SEPA' },
+      { name: 'PayPal', percent: 5.4, fixed: 0.3, fx: 'Castigo alto', withdraw: 'Variable', use: 'Clientes que solo usan PayPal' },
+      { name: 'Payoneer', percent: 3, fixed: 0, fx: 'Retiro caro', withdraw: 'Bueno', use: 'Marketplaces y cobro recurrente' },
+      { name: 'Stripe', percent: 3.6, fixed: 0.3, fx: 'Intermedio', withdraw: 'Bueno', use: 'SaaS, productos digitales y links de pago' },
+    ];
+
+    const referenceAmount = document.querySelector('#referenceAmount');
+    const platformRows = document.querySelector('#platformRows');
+    const money = new Intl.NumberFormat('es-EC', { style: 'currency', currency: 'USD' });
+
+    function renderRows() {
+      const amount = Number(referenceAmount.value) || 0;
+      platformRows.innerHTML = data.map((item) => {
+        const fee = amount * (item.percent / 100) + item.fixed;
+        const net = Math.max(amount - fee, 0);
+        return `
+          <tr>
+            <td class="py-3 pr-4 font-semibold text-white">${item.name}</td>
+            <td class="py-3 pr-4">${money.format(fee)}</td>
+            <td class="py-3 pr-4 text-emerald-300">${money.format(net)}</td>
+            <td class="py-3 pr-4">${item.fx}</td>
+            <td class="py-3 pr-4">${item.withdraw}</td>
+            <td class="py-3">${item.use}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    referenceAmount.addEventListener('input', renderRows);
+    renderRows();
+  </script>
+</Layout>

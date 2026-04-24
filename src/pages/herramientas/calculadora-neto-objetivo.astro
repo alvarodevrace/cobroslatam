@@ -1,0 +1,106 @@
+---
+import Layout from '../../components/Layout.astro';
+
+const title = 'Neto Objetivo 2026 | CobrosLatAm';
+const description = 'Calculadora neto objetivo para saber cuanto cobrar y cuanto debe pagarte tu cliente para recibir un neto exacto.';
+---
+<Layout {title} {description}>
+  <section class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_340px]">
+    <div>
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wide text-emerald-300">Cobro inverso</p>
+      <h1 class="mb-4 text-4xl font-bold text-white">Calculadora de neto objetivo</h1>
+      <p class="mb-8 max-w-2xl text-zinc-400">Parte del neto que quieres recibir y calcula cuanto debes cobrar para cubrir fee porcentual, fee fijo y castigo de cambio.</p>
+      <div class="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
+        <div class="grid gap-4 sm:grid-cols-2">
+          <label class="block text-sm text-zinc-300">
+            Neto deseado
+            <input id="targetNet" type="number" min="0" step="0.01" value="1000" class="mt-2 w-full rounded-md border border-zinc-700 bg-zinc-950 px-3 py-3 text-white" />
+          </label>
+          <label class="block text-sm text-zinc-300">
+            Plataforma
+            <select id="platform" class="mt-2 w-full rounded-md border border-zinc-700 bg-zinc-950 px-3 py-3 text-white">
+              <option value="paypal">PayPal</option>
+              <option value="wise">Wise</option>
+              <option value="payoneer">Payoneer</option>
+              <option value="stripe">Stripe</option>
+              <option value="custom">Custom</option>
+            </select>
+          </label>
+          <label class="block text-sm text-zinc-300">
+            Fee %
+            <input id="percentFee" type="number" min="0" step="0.01" value="5.4" class="mt-2 w-full rounded-md border border-zinc-700 bg-zinc-950 px-3 py-3 text-white" />
+          </label>
+          <label class="block text-sm text-zinc-300">
+            Fee fijo
+            <input id="fixedFee" type="number" min="0" step="0.01" value="0.3" class="mt-2 w-full rounded-md border border-zinc-700 bg-zinc-950 px-3 py-3 text-white" />
+          </label>
+          <label class="block text-sm text-zinc-300 sm:col-span-2">
+            Fee cambio %
+            <input id="fxFee" type="number" min="0" step="0.01" value="3.5" class="mt-2 w-full rounded-md border border-zinc-700 bg-zinc-950 px-3 py-3 text-white" />
+          </label>
+        </div>
+      </div>
+    </div>
+    <aside class="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
+      <h2 class="mb-4 text-lg font-semibold text-white">Resultado</h2>
+      <dl class="space-y-4">
+        <div class="flex justify-between gap-4 border-b border-zinc-800 pb-3">
+          <dt class="text-zinc-400">Debes cobrar</dt>
+          <dd id="grossNeeded" class="font-semibold text-emerald-300">$0.00</dd>
+        </div>
+        <div class="flex justify-between gap-4 border-b border-zinc-800 pb-3">
+          <dt class="text-zinc-400">Fee total estimado</dt>
+          <dd id="feeAmount" class="font-semibold text-white">$0.00</dd>
+        </div>
+        <div class="flex justify-between gap-4">
+          <dt class="text-zinc-400">Margen agregado</dt>
+          <dd id="markupRate" class="text-xl font-bold text-white">0%</dd>
+        </div>
+      </dl>
+      <p class="mt-5 rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 text-sm text-zinc-300">Usa este resultado para cotizar sin absorber fees con tu bolsillo.</p>
+    </aside>
+  </section>
+  <script>
+    const presets = {
+      paypal: { percent: 5.4, fixed: 0.3, fx: 3.5 },
+      wise: { percent: 1.1, fixed: 0.5, fx: 0 },
+      payoneer: { percent: 3, fixed: 0, fx: 2 },
+      stripe: { percent: 3.6, fixed: 0.3, fx: 2 },
+      custom: { percent: 0, fixed: 0, fx: 0 },
+    };
+
+    const targetNet = document.querySelector('#targetNet');
+    const platform = document.querySelector('#platform');
+    const percentFee = document.querySelector('#percentFee');
+    const fixedFee = document.querySelector('#fixedFee');
+    const fxFee = document.querySelector('#fxFee');
+    const grossNeeded = document.querySelector('#grossNeeded');
+    const feeAmount = document.querySelector('#feeAmount');
+    const markupRate = document.querySelector('#markupRate');
+    const money = new Intl.NumberFormat('es-EC', { style: 'currency', currency: 'USD' });
+
+    function syncPreset() {
+      const preset = presets[platform.value];
+      percentFee.value = preset.percent;
+      fixedFee.value = preset.fixed;
+      fxFee.value = preset.fx;
+      calculate();
+    }
+
+    function calculate() {
+      const target = Number(targetNet.value) || 0;
+      const percent = ((Number(percentFee.value) || 0) + (Number(fxFee.value) || 0)) / 100;
+      const fixed = Number(fixedFee.value) || 0;
+      const gross = percent >= 1 ? 0 : (target + fixed) / (1 - percent);
+      const fee = gross - target;
+
+      grossNeeded.textContent = money.format(gross);
+      feeAmount.textContent = money.format(fee);
+      markupRate.textContent = target > 0 ? `${((fee / target) * 100).toFixed(2)}%` : '0%';
+    }
+
+    platform.addEventListener('change', syncPreset);
+    [targetNet, percentFee, fixedFee, fxFee].forEach((element) => element.addEventListener('input', calculate));
+    syncPreset();
+  </script>
+</Layout>

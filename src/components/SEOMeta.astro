@@ -1,0 +1,36 @@
+---
+const {
+  title,
+  description,
+  path = Astro.url.pathname,
+  appName = title?.replace(/\s*\|\s*CobrosLatAm$/, '') ?? 'CobrosLatAm',
+} = Astro.props;
+
+const canonical = new URL(path, Astro.site ?? 'https://cobroslatam.com').toString();
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: appName,
+  url: canonical,
+  description,
+  applicationCategory: 'UtilitiesApplication',
+  operatingSystem: 'Any',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+};
+---
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+<meta property="og:type" content="website" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:site_name" content="CobrosLatAm" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

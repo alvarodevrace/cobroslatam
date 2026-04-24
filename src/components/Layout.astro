@@ -1,0 +1,53 @@
+---
+import SEOMeta from './SEOMeta.astro';
+import AdSlot from './AdSlot.astro';
+
+const {
+  title = 'CobrosLatAm 2026 | Cobrar mejor desde LatAm',
+  description = 'Herramientas gratis para calcular comisiones, netos, precios y cotizaciones freelance desde Latinoamerica.',
+  showTopAd = false,
+  showBottomAd = false,
+} = Astro.props;
+
+const adsenseClient = 'ca-pub-4782913478347937';
+const ga4Id = 'G-N9R880WHV1';
+---
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <SEOMeta {title} {description} />
+  <link rel="sitemap" href="/sitemap-index.xml" />
+  <script async src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`}></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', ga4Id);
+  </script>
+  <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`} crossorigin="anonymous"></script>
+</head>
+<body class="bg-zinc-950 text-zinc-100 min-h-screen">
+  <header class="border-b border-zinc-800 bg-zinc-950/90 px-6 py-4">
+    <div class="mx-auto flex max-w-6xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <a href="/" class="text-xl font-bold text-white">Cobros<span class="text-emerald-400">LatAm</span></a>
+      <nav class="flex flex-wrap gap-4 text-sm text-zinc-400">
+        <a href="/herramientas/calculadora-comisiones" class="hover:text-white">Comisiones</a>
+        <a href="/herramientas/calculadora-neto-objetivo" class="hover:text-white">Neto</a>
+        <a href="/herramientas/comparador-plataformas" class="hover:text-white">Comparador</a>
+        <a href="/herramientas/calculadora-precio-freelance" class="hover:text-white">Precio</a>
+        <a href="/blog" class="hover:text-white">Blog</a>
+      </nav>
+    </div>
+  </header>
+  <main class="max-w-6xl mx-auto px-6 py-10">
+    {showTopAd && <AdSlot position="top" />}
+    <slot />
+    {showBottomAd && <AdSlot position="bottom" />}
+  </main>
+  <footer class="border-t border-zinc-800 px-6 py-6 text-center text-sm text-zinc-500 mt-20">
+    CobrosLatAm 2026 · <a href="/blog" class="hover:text-zinc-300">Blog</a> · <a href="/privacidad" class="hover:text-zinc-300">Privacidad</a>
+  </footer>
+</body>
+</html>

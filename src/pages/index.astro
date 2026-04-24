@@ -1,0 +1,72 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../components/Layout.astro';
+import ToolCard from '../components/ToolCard.astro';
+
+const title = 'CobrosLatAm 2026 | Cobrar mejor desde LatAm';
+const description = 'Calculadoras gratis para fees, neto objetivo, comparativas y cotizaciones freelance para cobrar mejor desde Latinoamerica.';
+const tools = [
+  { title: 'Calculadora de Comisiones', description: 'Calcula fees de PayPal, Wise, Stripe, Payoneer o fee custom en segundos.', href: '/herramientas/calculadora-comisiones', icon: 'FEE' },
+  { title: 'Calculadora Neto Objetivo', description: 'Descubre cuanto debes cobrar para recibir un neto exacto despues de fees.', href: '/herramientas/calculadora-neto-objetivo', icon: 'NET' },
+  { title: 'Comparador de Plataformas', description: 'Compara fees, cambio, retiro y uso ideal de las plataformas de cobro mas comunes.', href: '/herramientas/comparador-plataformas', icon: 'CMP' },
+  { title: 'Calculadora Precio Freelance', description: 'Calcula tarifa por hora o mensual con gastos, impuestos y margen real.', href: '/herramientas/calculadora-precio-freelance', icon: 'USD' },
+  { title: 'Generador de Cotizacion', description: 'Crea propuesta freelance clara y copiable para enviar a clientes del exterior.', href: '/herramientas/generador-cotizacion', icon: 'TXT' },
+];
+const featuredSlugs = [
+  'comisiones-paypal-latam-2026',
+  'wise-vs-paypal-freelance',
+  'cuanto-cobrar-freelance-exterior',
+  'como-hacer-invoice-freelance',
+  'mejores-plataformas-cobro-latam',
+];
+const featuredPosts = (await getCollection('blog'))
+  .filter((post) => featuredSlugs.includes(post.slug))
+  .sort((a, b) => featuredSlugs.indexOf(a.slug) - featuredSlugs.indexOf(b.slug));
+---
+<Layout {title} {description}>
+  <section class="mb-12 max-w-4xl">
+    <p class="mb-3 text-sm font-semibold uppercase tracking-wide text-emerald-300">Cobros freelance LatAm</p>
+    <h1 class="mb-4 text-4xl font-bold text-white sm:text-5xl">Herramientas para cobrar mejor desde el exterior</h1>
+    <p class="text-lg leading-8 text-zinc-400">Calculadoras, comparativas y guias para freelancers y microagencias que cobran en USD y quieren perder menos en fees, retiros y conversiones.</p>
+  </section>
+
+  <div class="mb-8 grid gap-4 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-5 sm:grid-cols-3">
+    <div>
+      <p class="text-sm uppercase tracking-wide text-emerald-300">Batch 1</p>
+      <p class="mt-2 text-2xl font-bold text-white">5 herramientas</p>
+    </div>
+    <div>
+      <p class="text-sm uppercase tracking-wide text-emerald-300">Uso real</p>
+      <p class="mt-2 text-zinc-300">Fees, netos, precio y textos para cobrar.</p>
+    </div>
+    <div>
+      <p class="text-sm uppercase tracking-wide text-emerald-300">Audiencia</p>
+      <p class="mt-2 text-zinc-300">Freelancers, creadores y microagencias LatAm.</p>
+    </div>
+  </div>
+
+  <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {tools.map((tool) => <ToolCard {...tool} />)}
+  </section>
+
+  <section class="mt-16">
+    <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <p class="mb-2 text-sm font-semibold uppercase tracking-wide text-emerald-300">Guias clave</p>
+        <h2 class="text-2xl font-bold text-white">Contenido para cobrar, comparar y decidir</h2>
+      </div>
+      <a href="/blog" class="text-sm font-semibold text-emerald-300 hover:text-emerald-200">Ver blog completo</a>
+    </div>
+    <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+      {featuredPosts.map((post) => (
+        <article class="rounded-lg border border-zinc-800 bg-zinc-900 p-4">
+          <p class="mb-2 text-xs text-zinc-500">{post.data.pubDate.toLocaleDateString('es-EC')}</p>
+          <h2 class="text-base font-semibold leading-6 text-white">
+            <a href={`/blog/${post.slug}`} class="hover:text-emerald-300">{post.data.title}</a>
+          </h2>
+          <p class="mt-3 text-sm leading-6 text-zinc-400">{post.data.description}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+</Layout>
