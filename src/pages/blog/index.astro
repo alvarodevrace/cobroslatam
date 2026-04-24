@@ -7,15 +7,8 @@ const description = 'Guias practicas para freelancers de LatAm sobre comisiones,
 const posts = (await getCollection('blog')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
-const featuredSlugs = [
-  'comisiones-paypal-latam-2026',
-  'wise-vs-paypal-freelance',
-  'cuanto-cobrar-freelance-exterior',
-  'como-hacer-invoice-freelance',
-  'mejores-plataformas-cobro-latam',
-];
-const featuredPosts = posts.filter((post) => featuredSlugs.includes(post.slug));
-const otherPosts = posts.filter((post) => !featuredSlugs.includes(post.slug));
+const featuredPosts = posts.slice(0, 5);
+const otherPosts = posts.slice(5);
 ---
 <Layout {title} {description}>
   <section class="mb-10 max-w-3xl">
@@ -27,10 +20,10 @@ const otherPosts = posts.filter((post) => !featuredSlugs.includes(post.slug));
   <section class="mb-10 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-6">
     <div class="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
       <div>
-        <p class="text-sm font-semibold uppercase tracking-wide text-emerald-300">Batch nuevo</p>
-        <h2 class="text-2xl font-bold text-white">Guias destacadas para cobros freelance</h2>
+        <p class="text-sm font-semibold uppercase tracking-wide text-emerald-300">Recien publicado</p>
+        <h2 class="text-2xl font-bold text-white">Guias nuevas para cobros freelance</h2>
       </div>
-      <p class="text-sm text-zinc-400">Cinco posts conectados con herramientas core del sitio.</p>
+      <p class="text-sm text-zinc-400">Cinco posts mas recientes del cluster CobrosLatAm.</p>
     </div>
     <div class="grid gap-4 lg:grid-cols-5">
       {featuredPosts.map((post) => (

@@ -12,16 +12,9 @@ const tools = [
   { title: 'Calculadora Precio Freelance', description: 'Calcula tarifa por hora o mensual con gastos, impuestos y margen real.', href: '/herramientas/calculadora-precio-freelance', icon: 'USD' },
   { title: 'Generador de Cotizacion', description: 'Crea propuesta freelance clara y copiable para enviar a clientes del exterior.', href: '/herramientas/generador-cotizacion', icon: 'TXT' },
 ];
-const featuredSlugs = [
-  'comisiones-paypal-latam-2026',
-  'wise-vs-paypal-freelance',
-  'cuanto-cobrar-freelance-exterior',
-  'como-hacer-invoice-freelance',
-  'mejores-plataformas-cobro-latam',
-];
 const featuredPosts = (await getCollection('blog'))
-  .filter((post) => featuredSlugs.includes(post.slug))
-  .sort((a, b) => featuredSlugs.indexOf(a.slug) - featuredSlugs.indexOf(b.slug));
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 5);
 ---
 <Layout {title} {description}>
   <section class="mb-12 max-w-4xl">
@@ -52,8 +45,8 @@ const featuredPosts = (await getCollection('blog'))
   <section class="mt-16">
     <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
       <div>
-        <p class="mb-2 text-sm font-semibold uppercase tracking-wide text-emerald-300">Guias clave</p>
-        <h2 class="text-2xl font-bold text-white">Contenido para cobrar, comparar y decidir</h2>
+        <p class="mb-2 text-sm font-semibold uppercase tracking-wide text-emerald-300">Guias nuevas</p>
+        <h2 class="text-2xl font-bold text-white">Ultimo contenido para cobrar mejor</h2>
       </div>
       <a href="/blog" class="text-sm font-semibold text-emerald-300 hover:text-emerald-200">Ver blog completo</a>
     </div>
