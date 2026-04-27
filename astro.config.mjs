@@ -5,4 +5,5 @@ export default defineConfig({
   output: 'static',
   integrations: [tailwind()],
   site: 'https://cobroslatam.com',
+  trailingSlash: 'always',
 });
