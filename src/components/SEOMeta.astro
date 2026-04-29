@@ -7,12 +7,14 @@ const {
 } = Astro.props;
 
 const canonical = new URL(path, Astro.site ?? 'https://cobroslatam.com').toString();
+const logo = new URL('/brand/logo.png', Astro.site ?? 'https://cobroslatam.com').toString();
 const schema = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
   name: appName,
   url: canonical,
   description,
+  image: logo,
   applicationCategory: 'UtilitiesApplication',
   operatingSystem: 'Any',
   offers: {
@@ -30,7 +32,9 @@ const schema = {
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonical} />
 <meta property="og:site_name" content="CobrosLatAm" />
+<meta property="og:image" content={logo} />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={logo} />
 <script type="application/ld+json" set:html={JSON.stringify(schema)} />
