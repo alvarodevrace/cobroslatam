@@ -18,6 +18,8 @@ const ga4Id = 'G-N9R880WHV1';
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <SEOMeta {title} {description} />
+  <link rel="icon" type="image/png" href="/brand/logo.png" />
+  <link rel="apple-touch-icon" href="/brand/logo.png" />
   <link rel="sitemap" href="/sitemap-index.xml" />
   <script async src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`}></script>
   <script is:inline>
@@ -31,7 +33,10 @@ const ga4Id = 'G-N9R880WHV1';
 <body class="bg-zinc-950 text-zinc-100 min-h-screen">
   <header class="border-b border-zinc-800 bg-zinc-950/90 px-6 py-4">
     <div class="mx-auto flex max-w-6xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-      <a href="/" class="text-xl font-bold text-white">Cobros<span class="text-emerald-400">LatAm</span></a>
+      <a href="/" class="inline-flex items-center gap-3 text-xl font-bold text-white" aria-label="Inicio CobrosLatAm">
+        <img src="/brand/logo.png" alt="Logo CobrosLatAm" class="h-10 w-10 rounded-full object-contain" />
+        <span>Cobros<span class="text-emerald-400">LatAm</span></span>
+      </a>
       <nav class="flex flex-wrap gap-4 text-sm text-zinc-400">
         <a href="/herramientas/calculadora-comisiones" class="hover:text-white">Comisiones</a>
         <a href="/herramientas/calculadora-neto-objetivo" class="hover:text-white">Neto</a>
@@ -46,8 +51,17 @@ const ga4Id = 'G-N9R880WHV1';
     <slot />
     {showBottomAd && <AdSlot position="bottom" />}
   </main>
-  <footer class="border-t border-zinc-800 px-6 py-6 text-center text-sm text-zinc-500 mt-20">
-    CobrosLatAm 2026 · <a href="/blog" class="hover:text-zinc-300">Blog</a> · <a href="/privacidad" class="hover:text-zinc-300">Privacidad</a>
+  <footer class="mt-20 border-t border-zinc-800 px-6 py-6 text-sm text-zinc-500">
+    <div class="mx-auto flex max-w-6xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <a href="/" class="inline-flex items-center gap-3 font-semibold text-zinc-200" aria-label="Inicio CobrosLatAm">
+        <img src="/brand/logo.png" alt="Logo CobrosLatAm" class="h-10 w-10 rounded-full object-contain" loading="lazy" />
+        <span>CobrosLatAm 2026</span>
+      </a>
+      <div class="flex flex-wrap gap-4 sm:justify-end">
+        <a href="/blog" class="hover:text-zinc-300">Blog</a>
+        <a href="/privacidad" class="hover:text-zinc-300">Privacidad</a>
+      </div>
+    </div>
   </footer>
 </body>
 </html>
